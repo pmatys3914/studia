@@ -1,0 +1,6 @@
+# C# Projects
+
+bin/
+obj/
+*.suo
+*.user
