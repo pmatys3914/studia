@@ -60,7 +60,7 @@ namespace Coffee
                         option.Execute(ref state);
                         break;
                     case 4:
-                        //option = new OptionCashOut();
+                        option = new OptionCashOut();
                         option.Execute(ref state);
                         break;
                     case 0:
