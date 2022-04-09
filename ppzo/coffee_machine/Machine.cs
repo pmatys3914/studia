@@ -19,7 +19,7 @@ namespace Coffee
             public uint cups;
             public uint coins;
         }
-        private MachineState state = new MachineState();
+        private MachineState state = new MachineState(2000, 500, 250, 40);
 
         // Current option
         private IOption? option = null;
@@ -49,19 +49,19 @@ namespace Coffee
                 {
                     case 1:
                         option = new OptionBuy();
-                        option.Execute(state);
+                        option.Execute(ref state);
                         break;
                     case 2:
                         //option = new OptionFill();
-                        option.Execute(state);
+                        option.Execute(ref state);
                         break;
                     case 3:
-                        //option = new OptionStock();
-                        option.Execute(state);
+                        option = new OptionStock();
+                        option.Execute(ref state);
                         break;
                     case 4:
                         //option = new OptionCashOut();
-                        option.Execute(state);
+                        option.Execute(ref state);
                         break;
                     case 0:
                         return;

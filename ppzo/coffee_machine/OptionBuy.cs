@@ -24,13 +24,13 @@ namespace Coffee
             new Recipe("Espresso", 250, 0, 16, 4)
         };
 
-        public void Execute(Machine.MachineState state)
+        public void Execute(ref Machine.MachineState state)
         {
             Console.WriteLine("Pick a coffee:\n");
             int i = 1;
             foreach (Recipe r in recipes)
             {
-                Console.WriteLine($"[{i++}] {r.name} - {r.price} coins $");
+                Console.WriteLine($"[{i++}] {r.name} - {r.price} coins");
             }
             Console.WriteLine("[0] Back");
             while(true)
