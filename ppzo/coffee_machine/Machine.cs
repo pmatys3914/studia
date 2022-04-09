@@ -52,7 +52,7 @@ namespace Coffee
                         option.Execute(ref state);
                         break;
                     case 2:
-                        //option = new OptionFill();
+                        option = new OptionFill();
                         option.Execute(ref state);
                         break;
                     case 3:
