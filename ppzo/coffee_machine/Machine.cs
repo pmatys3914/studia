@@ -48,7 +48,7 @@ namespace Coffee
                 switch (action)
                 {
                     case 1:
-                        //option = new OptionBuy();
+                        option = new OptionBuy();
                         option.Execute(state);
                         break;
                     case 2:
