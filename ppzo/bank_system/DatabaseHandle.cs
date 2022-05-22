@@ -45,7 +45,7 @@ namespace Banking
                 var createCommand = con.CreateCommand();
                 createCommand.CommandText =
               @"CREATE TABLE accounts (
-                    accountId INTEGER UNIQUE PRIMARY KEY,
+                    accountId CHAR(16) UNIQUE PRIMARY KEY,
                     name VARCHAR(255) UNIQUE NOT NULL,
                     balance INTEGER NOT NULL,
                     password BINARY(255) NOT NULL,

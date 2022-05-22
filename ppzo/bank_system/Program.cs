@@ -17,6 +17,12 @@
 
             man.Add(data);
             man.Remove(data.accountId);
+
+            Random rnd = new Random();
+            for(int i = 0; i < 50; i++)
+            {
+                Console.WriteLine(AccountIdGenerator.Generate((uint)rnd.Next(100000)));
+            }
         }
     }
 }
