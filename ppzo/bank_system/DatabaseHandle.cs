@@ -4,34 +4,40 @@ namespace Banking
 {
     class DatabaseHandle {
         private String dbPath;
-        private SqliteConnection? dbConnection;
+        private SqliteConnection dbConnection;
         public DatabaseHandle(String dbPath = "bank.db")
         {
             this.dbPath = dbPath;
-            prepareDatabase();
-            if(dbConnection == null)
+            Prepare(); 
+            this.dbConnection = new SqliteConnection("Data Source = " + dbPath);
+            this.dbConnection.Open();
+            Console.WriteLine("Connected to the database.");
+        }
+
+        ~DatabaseHandle()
+        {
+            if(dbConnection != null)
             {
-                throw new NullReferenceException("Failed to initialize database connection!");
+                this.dbConnection.Close();
             }
         }
 
-        public SqliteConnection? GetConnection()
+        public SqliteConnection GetConnection()
         {
-            return dbConnection;
+            return this.dbConnection;
         }
 
-        private void prepareDatabase()
+        private void Prepare()
         {
             if(!File.Exists(dbPath))
             {
                 Console.WriteLine("Database file doesn't exist! Creating...");
-                createDatabase();
+                Create();
                 Console.WriteLine("Database Created!");
             }
-            dbConnection = new SqliteConnection("Data Source = " + dbPath);
         }
 
-        private void createDatabase()
+        private void Create()
         {
             using (var con = new SqliteConnection("Data Source = " + dbPath))
             {
@@ -39,11 +45,11 @@ namespace Banking
                 var createCommand = con.CreateCommand();
                 createCommand.CommandText =
               @"CREATE TABLE accounts (
-                    AccountId INTEGER PRIMARY KEY,
-                    Name VARCHAR(255) NOT NULL,
-                    Balance INTEGER NOT NULL,
-                    Password BINARY(255) NOT NULL,
-                    Salt BINARY(255) NOT NULL
+                    accountId INTEGER UNIQUE PRIMARY KEY,
+                    name VARCHAR(255) UNIQUE NOT NULL,
+                    balance INTEGER NOT NULL,
+                    password BINARY(255) NOT NULL,
+                    salt BINARY(255) NOT NULL
                 )";
                 createCommand.ExecuteNonQuery();
                 con.Close();
