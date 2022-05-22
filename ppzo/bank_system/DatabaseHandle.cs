@@ -4,14 +4,18 @@ namespace Banking
 {
     class DatabaseHandle {
         private String dbPath;
-        private SqliteConnection dbConnection;
+        private SqliteConnection? dbConnection;
         public DatabaseHandle(String dbPath = "bank.db")
         {
             this.dbPath = dbPath;
             prepareDatabase();
+            if(dbConnection == null)
+            {
+                throw new NullReferenceException("Failed to initialize database connection!");
+            }
         }
 
-        public SqliteConnection GetConnection()
+        public SqliteConnection? GetConnection()
         {
             return dbConnection;
         }
