@@ -23,14 +23,14 @@ namespace Banking
 
         private AccountManager()
         {
-            dbManager = AccountDatabaseManager.getInstance();
+            dbManager = AccountDatabaseManager.GetInstance();
         }
 
         public DisplayData Add(String name)
         {
             AccountData data = new AccountData();
             data.name = name;
-            data.accountId = AccountIdGenerator.Generate(dbManager.GetAmount());
+            data.accountId = AccountIdGenerator.Generate(dbManager.GetCount());
             data.balance = 0;
             PINData pin = PINUtils.Generate();
             data.hash = pin.hash;
@@ -50,6 +50,25 @@ namespace Banking
                     accountId = "",
                     pin = "",
                 };
+            }
+        }
+
+        public bool Remove(String accountId)
+        {
+            return dbManager.Remove(accountId);
+        }
+
+        public bool TransferFunds(String fromAccountId, String toAccountId, int amount)
+        {
+            if(dbManager.GetBalance(fromAccountId) < amount)
+            {
+                return false;
+            }
+            else
+            {
+                dbManager.AddBalance(fromAccountId, -amount);
+                dbManager.AddBalance(toAccountId, amount);
+                return true;
             }
         }
     }

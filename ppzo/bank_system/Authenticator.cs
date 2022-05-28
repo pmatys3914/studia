@@ -4,7 +4,7 @@ namespace Banking
     {
         private static Authenticator? instance;
 
-        public static Authenticator getInstance()
+        public static Authenticator GetInstance()
         {
             if (instance == null)
             {
@@ -15,10 +15,17 @@ namespace Banking
 
         private AccountDatabaseManager dbManager;
         private String currentUser = "";
+        public String CurrentUser
+        {
+            get
+            {
+                return currentUser;
+            }
+        }
 
         private Authenticator()
         {
-            dbManager = AccountDatabaseManager.getInstance();
+            dbManager = AccountDatabaseManager.GetInstance();
         }
 
         public bool Login(String accountId, string pin)
@@ -32,6 +39,7 @@ namespace Banking
             {
                 if (PINUtils.Validate(pin, dbManager.GetSalt(accountId), dbManager.GetHash(accountId)))
                 {
+                    Console.WriteLine("Login successful.");
                     currentUser = accountId;
                     return true;
                 }

@@ -3,7 +3,7 @@ namespace Banking
     class AccountDatabaseManager
     {
         private static AccountDatabaseManager? instance;
-        public static AccountDatabaseManager getInstance()
+        public static AccountDatabaseManager GetInstance()
         {
             if (instance == null)
             {
@@ -106,7 +106,7 @@ namespace Banking
             }
         }
 
-        public uint GetAmount()
+        public uint GetCount()
         {
             var getAmountCommand = dbHandle.GetConnection().CreateCommand();
             getAmountCommand.CommandText =
@@ -146,6 +146,18 @@ namespace Banking
             setBalanceCommand.ExecuteNonQuery();
         }
 
+        public void AddBalance(string id, int balance)
+        {
+            var addBalanceCommand = dbHandle.GetConnection().CreateCommand();
+            addBalanceCommand.CommandText =
+          @"UPDATE accounts
+            SET balance = balance + $balance
+            WHERE accountId = $id";
+            addBalanceCommand.Parameters.AddWithValue("$balance", balance);
+            addBalanceCommand.Parameters.AddWithValue("$id", id);
+            addBalanceCommand.ExecuteNonQuery();
+        }
+
         public string GetHash(string id)
         {
             var getHashCommand = dbHandle.GetConnection().CreateCommand();
@@ -169,6 +181,21 @@ namespace Banking
             WHERE accountId = $id";
             getSaltCommand.Parameters.AddWithValue("$id", id);
             string? result = (string?)getSaltCommand.ExecuteScalar();
+            if(result == null)
+            {
+                return "";
+            }
+            return result;
+        }
+
+        public string GetName(string id)
+        {
+            var getNameCommand = dbHandle.GetConnection().CreateCommand();
+            getNameCommand.CommandText =
+          @"SELECT name FROM accounts
+            WHERE accountId = $id";
+            getNameCommand.Parameters.AddWithValue("$id", id);
+            string? result = (string?)getNameCommand.ExecuteScalar();
             if(result == null)
             {
                 return "";
