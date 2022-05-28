@@ -8,7 +8,7 @@ namespace Banking
         public String hash;
     }
 
-    class PINGenerator
+    class PINUtils
     {
         public static PINData Generate()
         {
@@ -22,7 +22,7 @@ namespace Banking
         public static bool Validate(String PIN, String salt, String hash)
         {
             String newHash = System.Text.Encoding.UTF8.GetString(GenerateHash(PIN, salt));
-            return newHash == hash;
+            return String.Equals(newHash, hash);
         }
 
         private static String GeneratePIN()

@@ -2,11 +2,21 @@ namespace Banking
 {
     class AccountDatabaseManager
     {
+        private static AccountDatabaseManager? instance;
+        public static AccountDatabaseManager getInstance()
+        {
+            if (instance == null)
+            {
+                instance = new AccountDatabaseManager();
+            }
+            return instance;
+        }
+
         private DatabaseHandle dbHandle;
 
-        public AccountDatabaseManager(DatabaseHandle dbHandle)
+        private AccountDatabaseManager()
         {
-            this.dbHandle = dbHandle;
+            this.dbHandle = new DatabaseHandle();
         }
 
         public bool Add(AccountData data)
@@ -134,6 +144,36 @@ namespace Banking
             setBalanceCommand.Parameters.AddWithValue("$balance", balance);
             setBalanceCommand.Parameters.AddWithValue("$id", id);
             setBalanceCommand.ExecuteNonQuery();
+        }
+
+        public string GetHash(string id)
+        {
+            var getHashCommand = dbHandle.GetConnection().CreateCommand();
+            getHashCommand.CommandText =
+          @"SELECT hash FROM accounts
+            WHERE accountId = $id";
+            getHashCommand.Parameters.AddWithValue("$id", id);
+            string? result = (string?)getHashCommand.ExecuteScalar();
+            if(result == null)
+            {
+                return "";
+            }
+            return result;
+        }
+
+        public string GetSalt(string id)
+        {
+            var getSaltCommand = dbHandle.GetConnection().CreateCommand();
+            getSaltCommand.CommandText =
+          @"SELECT salt FROM accounts
+            WHERE accountId = $id";
+            getSaltCommand.Parameters.AddWithValue("$id", id);
+            string? result = (string?)getSaltCommand.ExecuteScalar();
+            if(result == null)
+            {
+                return "";
+            }
+            return result;
         }
     }
 }

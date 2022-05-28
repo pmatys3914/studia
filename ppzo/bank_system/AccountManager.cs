@@ -23,7 +23,7 @@ namespace Banking
 
         private AccountManager()
         {
-            dbManager = new AccountDatabaseManager(new DatabaseHandle());
+            dbManager = AccountDatabaseManager.getInstance();
         }
 
         public DisplayData Add(String name)
@@ -32,7 +32,7 @@ namespace Banking
             data.name = name;
             data.accountId = AccountIdGenerator.Generate(dbManager.GetAmount());
             data.balance = 0;
-            PINData pin = PINGenerator.Generate();
+            PINData pin = PINUtils.Generate();
             data.hash = pin.hash;
             data.salt = pin.salt;
             if(dbManager.Add(data))
