@@ -108,5 +108,32 @@ namespace Banking
             }
             return (uint)result;
         }
+
+        public int GetBalance(string id)
+        {
+            var getBalanceCommand = dbHandle.GetConnection().CreateCommand();
+            getBalanceCommand.CommandText =
+          @"SELECT balance FROM accounts
+            WHERE accountId = $id";
+            getBalanceCommand.Parameters.AddWithValue("$id", id);
+            Int64? result = (Int64?)getBalanceCommand.ExecuteScalar();
+            if(result == null)
+            {
+                return 0;
+            }
+            return (int)result;
+        }
+        
+        public void SetBalance(string id, int balance)
+        {
+            var setBalanceCommand = dbHandle.GetConnection().CreateCommand();
+            setBalanceCommand.CommandText =
+          @"UPDATE accounts
+            SET balance = $balance
+            WHERE accountId = $id";
+            setBalanceCommand.Parameters.AddWithValue("$balance", balance);
+            setBalanceCommand.Parameters.AddWithValue("$id", id);
+            setBalanceCommand.ExecuteNonQuery();
+        }
     }
 }

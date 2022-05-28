@@ -46,7 +46,7 @@ namespace Banking
 
         private static byte[] GenerateHash(String pin, String salt)
         {
-            HashAlgorithm algorithm = SHA256Managed.Create();
+            HashAlgorithm algorithm = SHA256.Create();
 
             byte[] pinWithSalt = new byte[pin.Length + salt.Length];
 
