@@ -19,12 +19,12 @@ namespace Banking
             var addCommand = dbHandle.GetConnection().CreateCommand();
             addCommand.CommandText =
           @"INSERT INTO accounts
-            VALUES ($id, $name, $balance, $password, $hash)";
+            VALUES ($id, $name, $balance, $hash, $salt)";
             addCommand.Parameters.AddWithValue("$id", data.accountId);
             addCommand.Parameters.AddWithValue("$name", data.name);
             addCommand.Parameters.AddWithValue("$balance", data.balance);
-            addCommand.Parameters.AddWithValue("$password", data.password);
             addCommand.Parameters.AddWithValue("$hash", data.hash);
+            addCommand.Parameters.AddWithValue("$salt", data.salt);
             addCommand.ExecuteNonQuery();
             if(Exists(data))
             {
@@ -40,10 +40,10 @@ namespace Banking
 
         public bool Exists(AccountData data)
         {
-            return this.Exists(data.name) || this.Exists(data.accountId);
+            return this.ExistsName(data.name) || this.ExistsId(data.accountId);
         }
 
-        public bool Exists(String name)
+        public bool ExistsName(String name)
         {
             var checkNameCommand = dbHandle.GetConnection().CreateCommand();
             checkNameCommand.CommandText =
@@ -57,7 +57,7 @@ namespace Banking
             return false;
         }
 
-        public bool Exists(uint id)
+        public bool ExistsId(String id)
         {
             var checkIdCommand = dbHandle.GetConnection().CreateCommand();
             checkIdCommand.CommandText =
@@ -71,9 +71,9 @@ namespace Banking
             return false;
         }
 
-        public bool Remove(uint id)
+        public bool Remove(String id)
         {
-            if(!Exists(id))
+            if(!ExistsId(id))
             {
                 Console.WriteLine("Error: Cannot remove non-existent account");
                 return false;
@@ -84,7 +84,7 @@ namespace Banking
             WHERE accountId = $id";
             removeCommand.Parameters.AddWithValue("$id", id);
             removeCommand.ExecuteNonQuery();
-            if(!Exists(id))
+            if(!ExistsName(id))
             {
                 Console.WriteLine("Account {0} terminated successfully.", id);
                 return true;

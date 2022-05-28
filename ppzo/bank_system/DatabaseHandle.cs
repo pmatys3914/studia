@@ -48,7 +48,7 @@ namespace Banking
                     accountId CHAR(16) UNIQUE PRIMARY KEY,
                     name VARCHAR(255) UNIQUE NOT NULL,
                     balance INTEGER NOT NULL,
-                    password BINARY(255) NOT NULL,
+                    hash BINARY(255) NOT NULL,
                     salt BINARY(255) NOT NULL
                 )";
                 createCommand.ExecuteNonQuery();
